@@ -1,3 +1,4 @@
+use secrecy::ExposeSecret;
 use sqlx::PgPool;
 use std::net::TcpListener;
 use tracing::subscriber::set_global_default;
@@ -21,9 +22,10 @@ async fn main() -> Result<(), std::io::Error> {
         .with(formatting_layer);
     set_global_default(subscriber).expect("Failed to set subscriber");
     let configuration = get_configuration().expect("Failed to read configuration file");
-    let connection_pool = PgPool::connect(&configuration.database.connection_string())
-        .await
-        .expect("Failed to connect to the database");
+    let connection_pool =
+        PgPool::connect(&configuration.database.connection_string().expose_secret())
+            .await
+            .expect("Failed to connect to the database");
 
     let address = format!("127.0.0.1:{}", configuration.application_port);
     let listener = TcpListener::bind(&address)?;
