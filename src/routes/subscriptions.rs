@@ -16,15 +16,15 @@ impl TryFrom<FormData> for NewSubscriber {
     fn try_from(value: FormData) -> Result<Self, Self::Error> {
         let name = SubscriberName::parse(value.name)?;
         let email = SubscriberEmail::parse(value.email)?;
-        Ok(Self{email, name})
+        Ok(Self { email, name })
     }
 }
 
-pub fn parse_subscriber(form: FormData) -> Result<NewSubscriber, String> {
-    let name = SubscriberName::parse(form.name)?;
-    let email = SubscriberEmail::parse(form.email)?;
-    Ok(NewSubscriber { email, name })
-}
+//pub fn parse_subscriber(form: FormData) -> Result<NewSubscriber, String> {
+//    let name = SubscriberName::parse(form.name)?;
+//    let email = SubscriberEmail::parse(form.email)?;
+//    Ok(NewSubscriber { email, name })
+//}
 
 #[tracing::instrument(
     name = "Adding a new subscriber",
