@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-set -x
-set -eo pipefail
+#!/usr/bin/env bash -exo pipefail
 
 if ! [ -x "$(command -v psql)" ]; then
   echo >&2 "Error: psql is not installed."
@@ -10,7 +8,7 @@ fi
 if ! [ -x "$(command -v sqlx)" ]; then
   echo >&2 "Error: sqlx is not installed."
   echo >&2 "Use:"
-  echo >&2 " cargo install --version='~0.7' sqlx-cli --no-default-features --features rustls,postgres"
+  echo >&2 " cargo install --version='~0.7.2' sqlx-cli --no-default-features --features rustls,postgres"
   echo >&2 "to install it."
 fi 
 
