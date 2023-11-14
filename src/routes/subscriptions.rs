@@ -40,9 +40,7 @@ pub async fn subscribe(
     pool: web::Data<PgPool>,
     email_client: web::Data<EmailClient>,
 ) -> HttpResponse {
-    //let new_subscriber = match parse_subscriber(form.0) {
     let new_subscriber = match form.0.try_into() {
-        //Ok(subscriber) => subscriber,
         Ok(form) => form,
         Err(_) => return HttpResponse::BadRequest().finish(),
     };
@@ -68,7 +66,7 @@ pub async fn send_confirmation_email(
     email_client: &EmailClient,
     new_subscriber: NewSubscriber,
 ) -> Result<(), reqwest::Error> {
-    let confirmation_link = "https://there-is-no-such-domain.com/subscriptions.confirm";
+    let confirmation_link = "https://there-is-no-such-domain.com/subscriptions/confirm";
     let plain_body = format!(
         "Welcome to our newsletter!\nVisit {} to confirm your subscription.",
         confirmation_link
@@ -94,8 +92,7 @@ pub async fn insert_subscriber(
     sqlx::query!(
         r#"
         INSERT INTO subscriptions (id, email, name, subscribed_at, status)
-        VALUES ($1, $2, $3, $4, 'pending_confirmation')
-        "#,
+        VALUES ($1, $2, $3, $4, 'pending_confirmation')"#,
         Uuid::new_v4(),
         new_subscriber.email.as_ref(),
         new_subscriber.name.as_ref(),

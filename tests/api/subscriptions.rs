@@ -25,7 +25,7 @@ async fn subscribe_returns_a_200_for_valid_form_data() {
 async fn subscribe_persists_the_new_subscriber() {
     // Arrange
     let app = spawn_app().await;
-    let body = "name=le%20guin&email=Ursula_le_guin%20gmail.com";
+    let body = "name=le%20guin&email=ursula_le_guin%40gmail.com";
     
     Mock::given(path("/email"))
         .and(method("POST"))
@@ -36,7 +36,7 @@ async fn subscribe_persists_the_new_subscriber() {
     app.post_subscriptions(body.into()).await;
 
     // Act
-    let saved = sqlx::query("SSELECT email, name, status FROM subscriptions",)
+    let saved = sqlx::query!("SELECT email, name, status FROM subscriptions",)
         .fetch_one(&app.db_pool)
         .await
         .expect("Failed to fetch saved subscriptions");
