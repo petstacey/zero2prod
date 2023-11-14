@@ -1,4 +1,6 @@
-#!/usr/bin/env bash -exo pipefail
+#!/usr/bin/env bash 
+set -ex 
+set -o pipefail
 
 if ! [ -x "$(command -v psql)" ]; then
   echo >&2 "Error: psql is not installed."
